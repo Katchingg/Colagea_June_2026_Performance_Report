@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colagea — Résumé de Performance Juin 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; line-height: 1.6; color: #1a1a1a; background: #f5f4f0; }
+  .page { max-width: 960px; margin: 0 auto; padding: 40px 32px; }
+  @media(max-width:600px){ .page { padding: 16px 12px; } }
+  :root { --blue: #0085F7; --blue-light: #E6F2FF; --green: #138D5A; --green-light: #E6F5EE; --amber: #F8B83A; --amber-light: #FEF6E6; --red: #c0392b; --red-light: #fdf0ee; --dark: #0F1923; }
+  .cover { background: var(--dark); color: #fff; border-radius: 12px; padding: 48px; margin-bottom: 24px; position: relative; overflow: hidden; }
+  .cover::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--blue) 0%, var(--green) 50%, var(--amber) 100%); }
+  @media(max-width:600px){ .cover { padding: 28px 20px; } }
+  .cover-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+  .cover-logo-circles { width: 36px; height: 36px; position: relative; flex-shrink: 0; }
+  .c1 { position: absolute; width: 36px; height: 36px; border-radius: 50%; border: 5px solid var(--blue); border-bottom-color: transparent; transform: rotate(-30deg); }
+  .c2 { position: absolute; width: 24px; height: 24px; top: 6px; left: 6px; border-radius: 50%; border: 4px solid var(--green); border-top-color: transparent; transform: rotate(30deg); }
+  .c3 { position: absolute; width: 12px; height: 12px; top: 12px; left: 12px; border-radius: 50%; background: var(--amber); }
+  .cover-logo-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); }
+  .cover-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.7); font-size: 11px; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; letter-spacing: 0.5px; }
+  .cover h1 { font-size: 30px; font-weight: 700; margin-bottom: 4px; }
+  @media(max-width:600px){ .cover h1 { font-size: 22px; } }
+  .cover-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 28px; }
+  .cover-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; }
+  @media(max-width:600px){ .cover-meta { grid-template-columns: 1fr 1fr; } }
+  .cover-meta-item { padding: 14px 16px; background: rgba(255,255,255,0.05); }
+  .cover-meta-item .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.35); margin-bottom: 4px; }
+  .cover-meta-item .value { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 500; }
+  .section { background: #fff; border-radius: 12px; padding: 28px 32px; margin-bottom: 20px; border: 0.5px solid #e5e3dd; }
+  @media(max-width:600px){ .section { padding: 18px 16px; } }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 2px solid #f0ede8; }
+  .section-number { width: 30px; height: 30px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--dark); }
+  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 16px; }
+  @media(max-width:600px){ .metrics-grid { grid-template-columns: 1fr 1fr; } }
+  .metric-card { background: #f8f7f4; border-radius: 8px; padding: 14px; border-top: 3px solid var(--blue); }
+  .metric-card.green { border-top-color: var(--green); } .metric-card.amber { border-top-color: var(--amber); } .metric-card.red { border-top-color: var(--red); }
+  .metric-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: #999; margin-bottom: 5px; font-weight: 600; }
+  .metric-value { font-size: 20px; font-weight: 700; color: var(--dark); line-height: 1; margin-bottom: 4px; }
+  .metric-change { font-size: 11px; font-weight: 500; }
+  .up { color: var(--green); } .down { color: var(--red); } .neutral { color: #999; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 480px; }
+  th { text-align: left; padding: 9px 12px; background: #f8f7f4; color: #666; font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 2px solid #ede9e3; }
+  td { padding: 9px 12px; border-bottom: 0.5px solid #f0ede8; color: #1a1a1a; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  .td-right { text-align: right; } .td-center { text-align: center; }
+  .badge { display: inline-block; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-amber { background: var(--amber-light); color: #9a6800; }
+  .badge-blue { background: var(--blue-light); color: var(--blue); }
+  .badge-gray { background: #f3f2f0; color: #666; }
+  .highlight { border-radius: 0 8px 8px 0; padding: 12px 14px; margin: 10px 0; font-size: 13px; line-height: 1.6; }
+  .highlight.info { background: var(--blue-light); border-left: 3px solid var(--blue); color: #0a3d80; }
+  .highlight.success { background: var(--green-light); border-left: 3px solid var(--green); color: #0a4a2a; }
+  .highlight.warning { background: var(--amber-light); border-left: 3px solid var(--amber); color: #6b3f00; }
+  .highlight.danger { background: var(--red-light); border-left: 3px solid var(--red); color: #6b1a1a; }
+  .subsection-title { font-size: 13px; font-weight: 700; color: var(--dark); margin: 18px 0 10px; padding-bottom: 7px; border-bottom: 0.5px solid #ede9e3; display: flex; align-items: center; gap: 8px; }
+  .subsection-title::before { content: ''; width: 4px; height: 16px; background: var(--blue); border-radius: 2px; flex-shrink: 0; }
+  .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  @media(max-width:600px){ .split-grid { grid-template-columns: 1fr; } }
+  .split-card { background: #f8f7f4; border-radius: 8px; padding: 14px 16px; }
+  .split-card-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #888; margin-bottom: 10px; }
+  .split-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 0.5px solid #ede9e3; font-size: 12px; }
+  .split-row:last-child { border-bottom: none; }
+  .split-row-label { color: #666; } .split-row-value { font-weight: 600; color: var(--dark); }
+  .action-item { display: flex; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid #f0ede8; align-items: flex-start; }
+  .action-item:last-child { border-bottom: none; }
+  .action-date { font-size: 11px; font-weight: 700; color: var(--blue); white-space: nowrap; min-width: 55px; margin-top: 1px; }
+  .action-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; color: var(--dark); }
+  .action-desc { font-size: 12px; color: #555; line-height: 1.5; }
+  .color-bar { height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--blue) 0%, var(--green) 50%, var(--amber) 100%); margin-bottom: 28px; }
+  .report-footer { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-top: 1px solid #ede9e3; font-size: 11px; color: #aaa; flex-wrap: wrap; gap: 8px; }
+  .new-tag { display: inline-block; background: var(--green-light); color: var(--green); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+  .learning-tag { display: inline-block; background: var(--amber-light); color: #9a6800; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+  .done-tag { display: inline-block; background: var(--green-light); color: var(--green); font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+  .good-sign { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 0.5px solid #f0ede8; font-size: 13px; }
+  .good-sign:last-child { border-bottom: none; }
+  .good-sign-icon { color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .june-card { background: #f8f7f4; border-radius: 8px; padding: 14px 16px; margin-bottom: 8px; display: flex; gap: 12px; align-items: flex-start; }
+  .june-priority { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+  .june-body .june-title { font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 3px; }
+  .june-body .june-desc { font-size: 12px; color: #666; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="page">
+<div class="color-bar"></div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-logo">
+    <div class="cover-logo-circles"><div class="c1"></div><div class="c2"></div><div class="c3"></div></div>
+    <div class="cover-logo-name">Katchingg Media — Google Ads pour l'eCom</div>
+  </div>
+  <div class="cover-badge">Juin 2026 — Résumé de Performance</div>
+  <h1>Colagea — Google Ads</h1>
+  <div class="cover-sub">1–30 juin 2026 vs. 1–31 mai 2026 · France · EUR</div>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><div class="label">Compte</div><div class="value">Colagea EUR</div></div>
+    <div class="cover-meta-item"><div class="label">Période</div><div class="value">1–30 juin 2026</div></div>
+    <div class="cover-meta-item"><div class="label">Préparé par</div><div class="value">Diana</div></div>
+    <div class="cover-meta-item"><div class="label">Vérifié par</div><div class="value">Charles Perot</div></div>
+  </div>
+</div>
+
+<!-- 1. VUE D'ENSEMBLE -->
+<div class="section">
+  <div class="section-header"><div class="section-number">1</div><div class="section-title">Vue d'ensemble du compte — Juin vs Mai</div></div>
+  <div class="metrics-grid">
+    <div class="metric-card blue"><div class="metric-label">Valeur conv.</div><div class="metric-value">52,7K</div><div class="metric-change up">▲ +8,13K vs Mai</div></div>
+    <div class="metric-card red"><div class="metric-label">Conversions</div><div class="metric-value">698,40</div><div class="metric-change up">▲ +102,41 vs Mai</div></div>
+    <div class="metric-card amber"><div class="metric-label">Valeur conv. / coût (ROAS)</div><div class="metric-value">5,09</div><div class="metric-change up">▲ +0,13 vs Mai</div></div>
+    <div class="metric-card green"><div class="metric-label">Coût</div><div class="metric-value">€10,3K</div><div class="metric-change up">▲ +€1,36K vs Mai</div></div>
+    <div class="metric-card blue"><div class="metric-label">CPC moyen</div><div class="metric-value">€0,32</div><div class="metric-change up">▲ +€0,05 vs Mai</div></div>
+    <div class="metric-card red"><div class="metric-label">Clics</div><div class="metric-value">32K</div><div class="metric-change down">▼ -882 vs Mai</div></div>
+  </div>
+  <div class="highlight info">Juin a été un mois de scaling et d'optimisation, pas de restructuration. La valeur de conversion a progressé de +8,13K (44,6K → 52,7K) et les conversions de +102 (596 → 698), tandis que le coût augmentait de +€1,36K. Le ROAS compte a même progressé de 4,96x à 5,09x — porté par le doublement du volume de Brand Search et la mise en pause du poste déficitaire (Micro-infusion). Le CPC moyen a légèrement augmenté (€0,27 → €0,32) sous l'effet de la concurrence sur les enchères de marque et de l'expansion volontaire de Brand Shopping. Le compte est resté hautement rentable tout en absorbant une dépense supplémentaire.</div>
+  <p style="font-size:11px;color:#aaa;margin-top:4px;">Vue d'ensemble telle qu'affichée dans Google Ads (hors campagne Micro-infusion pausée). Le détail par campagne en sections 3–4 couvre l'intégralité des 8 campagnes, Micro-infusion incluse.</p>
+
+  <div style="margin-top:16px;">
+    <div style="position:relative;width:100%;height:220px;"><canvas id="revenueChart"></canvas></div>
+  </div>
+
+  <div style="margin-top:16px;">
+    <div class="subsection-title">Avant vs après les optimisations du 19 juin — niveau compte (moyennes journalières)</div>
+    <div class="split-grid">
+      <div class="split-card">
+        <div class="split-card-title">1–18 juin — Avant optimisations</div>
+        <div class="split-row"><span class="split-row-label">Dépense journalière</span><span class="split-row-value">€389/jour</span></div>
+        <div class="split-row"><span class="split-row-label">Valeur conv. journalière</span><span class="split-row-value">€1 885/jour</span></div>
+        <div class="split-row"><span class="split-row-label">ROAS</span><span class="split-row-value">4,85x</span></div>
+        <div class="split-row"><span class="split-row-label">Coût/conv.</span><span class="split-row-value">€15,42</span></div>
+      </div>
+      <div class="split-card">
+        <div class="split-card-title">19–30 juin — Après optimisations + lancement Concurrents</div>
+        <div class="split-row"><span class="split-row-label">Dépense journalière</span><span class="split-row-value">€374/jour</span></div>
+        <div class="split-row"><span class="split-row-label">Valeur conv. journalière</span><span class="split-row-value">€1 582/jour</span></div>
+        <div class="split-row"><span class="split-row-label">ROAS</span><span class="split-row-value" style="color:var(--amber);">4,23x</span></div>
+        <div class="split-row"><span class="split-row-label">Coût/conv.</span><span class="split-row-value">€18,15</span></div>
+      </div>
+    </div>
+    <div class="highlight info"><strong>La dépense journalière est restée stable (−3,8%) tandis que la structure du compte évoluait.</strong> Le léger recul du ROAS (4,85x → 4,23x) sur la seconde moitié du mois s'explique directement par le lancement de la campagne Concurrents (dépense en learning phase sans conversion) et par l'expansion volontaire de Brand Shopping (Max CPC porté de €0,30 à €0,75, élargissant le reach au prix d'un ROAS plus dilué mais toujours très rentable). Le compte demeure à 4,23x sur cette fenêtre — largement au-dessus du seuil de rentabilité.</div>
+  </div>
+</div>
+
+<!-- 2. POINTS POSITIFS -->
+<div class="section">
+  <div class="section-header"><div class="section-number" style="background:var(--green);">2</div><div class="section-title">Points positifs — Juin 2026</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>FR Brand Search a doublé son volume tout en gagnant en efficacité</strong> — dépense +79,6% (€1 484 → €2 665), ROAS en hausse de 8,51x à 10,70x, conversions +112% (170 → 373,5). Génère à lui seul 53,8% de la valeur de conversion totale du compte (€28,5K).</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>L'augmentation budgétaire de Brand Search a éliminé la limitation budgétaire</strong> — après le passage à €100/jour le 19 juin, le Lost IS (budget) est tombé de 14,85% à 0,00% et le Search IS est monté à 94,14%. La campagne capte désormais la quasi-totalité de l'intention de marque.</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>PMax Femme a scalé de façon rentable et disciplinée</strong> — dépense +222% (€523 → €1 686) tout en maintenant un ROAS quasi stable (2,13x → 2,07x). Conversions +203% (14,7 → 44,6). Le canal YouTube performe à 3,28x et Search à 2,20x.</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>PMax Homme confirme sa viabilité post-apprentissage</strong> — ROAS à 2,16x sur le mois complet, au-dessus du seuil de rentabilité de 2,0x. Le canal Discover (€1 376) mène le volume à 2,20x ROAS. Budget réaugmenté à €85/jour le 30 juin pour capitaliser.</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>NB Shopping Femmes a doublé son ROAS mois sur mois</strong> — de 0,73x (mai) à 1,45x (juin), avec un coût/conv réduit de moitié (€102,95 → €50,84) et +441% de conversions. La trajectoire mensuelle est nettement positive, même si la campagne reste le chantier prioritaire (voir section 4).</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>Brand Shopping reste le champion de l'efficacité</strong> — 14,17x ROAS sur le mois complet et €5,15 coût/conv, malgré l'expansion volontaire. La hausse du Max CPC a fait chuter le Lost IS rank de 77,65% à 54,54% sur la seconde moitié du mois, récupérant une part d'impressions significative.</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>Décision d'arrêt nette sur Micro-infusion Homme</strong> — après une tentative d'optimisation (passage en Manual CPC, nouveaux mots-clés), la campagne restait à 0,59x ROAS et €130 coût/conv. Mise en pause le 30 juin pour protéger la marge du compte. La bonne décision, prise au bon moment.</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>Lancement structuré de la campagne Concurrents</strong> — nouvelle campagne créée le 19 juin avec 4 groupes d'annonces, RSA unifié et budget escaladé. En phase d'apprentissage &amp; optimisation, comme prévu pour une campagne nouvellement lancée.</div></div>
+  <div class="good-sign"><div class="good-sign-icon">✅</div><div><strong>Hygiène du compte renforcée</strong> — 4 audiences de remarketing créées (acheteurs, paniers abandonnés, non-acheteurs) et plus de 60 mots-clés négatifs ajoutés (concurrents et termes non pertinents) sur Brand Shopping et les listes partagées, protégeant le compte de la dérive vers un trafic non qualifié.</div></div>
+</div>
+
+<!-- 3. RÉSUMÉ DES PERFORMANCES -->
+<div class="section">
+  <div class="section-header"><div class="section-number">3</div><div class="section-title">Résumé des performances par campagne — Juin 2026</div></div>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Campagne</th>
+        <th class="td-right">Dépense</th>
+        <th class="td-right">Valeur conv.</th>
+        <th class="td-right">ROAS</th>
+        <th class="td-right">Conv.</th>
+        <th class="td-right">Coût/conv.</th>
+        <th class="td-center">Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>FR Brand Search</strong></td>
+        <td class="td-right">€2 665</td>
+        <td class="td-right">€28 506</td>
+        <td class="td-right" style="color:var(--green);font-weight:700;">10,70x</td>
+        <td class="td-right">373,5</td>
+        <td class="td-right">€7,14</td>
+        <td class="td-center"><span class="badge badge-green">Core ✅</span></td>
+      </tr>
+      <tr>
+        <td><strong>FR Brand Shopping</strong></td>
+        <td class="td-right">€726</td>
+        <td class="td-right">€10 293</td>
+        <td class="td-right" style="color:var(--green);font-weight:700;">14,17x</td>
+        <td class="td-right">141,0</td>
+        <td class="td-right">€5,15</td>
+        <td class="td-center"><span class="badge badge-green">Efficacité ✅</span></td>
+      </tr>
+      <tr>
+        <td><strong>FR NB PMax Homme</strong></td>
+        <td class="td-right">€2 157</td>
+        <td class="td-right">€4 656</td>
+        <td class="td-right" style="color:var(--green);font-weight:700;">2,16x</td>
+        <td class="td-right">62,5</td>
+        <td class="td-right">€34,52</td>
+        <td class="td-center"><span class="badge badge-green">Post-apprentissage ✅</span></td>
+      </tr>
+      <tr>
+        <td><strong>FR NB PMax Femme</strong></td>
+        <td class="td-right">€1 686</td>
+        <td class="td-right">€3 484</td>
+        <td class="td-right" style="color:var(--green);font-weight:700;">2,07x</td>
+        <td class="td-right">44,6</td>
+        <td class="td-right">€37,79</td>
+        <td class="td-center"><span class="badge badge-green">Scaling ↗</span></td>
+      </tr>
+      <tr>
+        <td><strong>FR NB Shopping Hommes</strong></td>
+        <td class="td-right">€1 245</td>
+        <td class="td-right">€2 682</td>
+        <td class="td-right" style="color:var(--green);font-weight:700;">2,15x</td>
+        <td class="td-right">35,2</td>
+        <td class="td-right">€35,37</td>
+        <td class="td-center"><span class="badge badge-green">Stable ✅</span></td>
+      </tr>
+      <tr style="background:#fff8f0;">
+        <td><strong>FR NB Shopping Femmes</strong></td>
+        <td class="td-right">€1 858</td>
+        <td class="td-right">€2 702</td>
+        <td class="td-right" style="color:var(--amber);font-weight:700;">1,45x</td>
+        <td class="td-right">36,6</td>
+        <td class="td-right">€50,84</td>
+        <td class="td-center"><span class="badge badge-amber">À restructurer 🚨</span></td>
+      </tr>
+      <tr style="background:#fdf5f5;">
+        <td><strong>FR NB Search — Micro-infusion Homme</strong><br><small style="color:#888;">pausée le 30 juin</small></td>
+        <td class="td-right">€1 143</td>
+        <td class="td-right">€593</td>
+        <td class="td-right" style="color:var(--red);font-weight:700;">0,52x</td>
+        <td class="td-right">7,6</td>
+        <td class="td-right">€151,17</td>
+        <td class="td-center"><span class="badge badge-red">Pausée ✂️</span></td>
+      </tr>
+      <tr style="background:#fafef8;">
+        <td><strong>FR NB Search — Concurrents</strong> <span class="new-tag">NOUVEAU</span><br><small style="color:#888;">lancée le 19 juin (12 jours)</small></td>
+        <td class="td-right">€4</td>
+        <td class="td-right">€0</td>
+        <td class="td-right" style="color:#888;">—</td>
+        <td class="td-right">0</td>
+        <td class="td-right">—</td>
+        <td class="td-center"><span class="learning-tag">Apprentissage</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;">Les lignes ombrées correspondent aux campagnes lancées, pausées ou en restructuration en juin. La campagne Concurrents n'a que 12 jours d'historique — les comparaisons sur un mois complet ne s'appliquent pas.</p>
+</div>
+
+<!-- 4. ANALYSE DÉTAILLÉE -->
+<div class="section">
+  <div class="section-header"><div class="section-number">4</div><div class="section-title">Analyse détaillée par campagne</div></div>
+
+  <!-- Brand Search -->
+  <div class="subsection-title">FR Brand Search — Impact de l'augmentation budgétaire (€80 → €100/jour, 19 juin)</div>
+  <div class="split-grid">
+    <div class="split-card">
+      <div class="split-card-title">1–18 juin — avant augmentation</div>
+      <div class="split-row"><span class="split-row-label">Search IS</span><span class="split-row-value">81,48%</span></div>
+      <div class="split-row"><span class="split-row-label">Lost IS (budget)</span><span class="split-row-value" style="color:var(--amber);">14,85%</span></div>
+      <div class="split-row"><span class="split-row-label">ROAS</span><span class="split-row-value">11,00x</span></div>
+      <div class="split-row"><span class="split-row-label">Conversions</span><span class="split-row-value">224,1</span></div>
+    </div>
+    <div class="split-card">
+      <div class="split-card-title">19–30 juin — après augmentation</div>
+      <div class="split-row"><span class="split-row-label">Search IS</span><span class="split-row-value" style="color:var(--green);">94,14% ▲</span></div>
+      <div class="split-row"><span class="split-row-label">Lost IS (budget)</span><span class="split-row-value" style="color:var(--green);">0,00% ▲</span></div>
+      <div class="split-row"><span class="split-row-label">ROAS</span><span class="split-row-value">10,27x</span></div>
+      <div class="split-row"><span class="split-row-label">Conversions</span><span class="split-row-value">149,5 (12 jours)</span></div>
+    </div>
+  </div>
+  <div class="highlight success">L'augmentation à €100/jour était la bonne décision. Le Lost IS (budget) a été entièrement éliminé (14,85% → 0,00%) et le Search IS est monté à 94,14%. La campagne n'est plus limitée par le budget et capte désormais la quasi-totalité des recherches de marque, tout en maintenant un ROAS supérieur à 10x.</div>
+
+  <!-- Brand Shopping -->
+  <div class="subsection-title" style="margin-top:20px;">FR Brand Shopping — Expansion volontaire (Max CPC €0,30 → €0,75, 19 juin)</div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Période</th><th class="td-right">Dépense</th><th class="td-right">ROAS</th><th class="td-right">Lost IS Rank</th><th class="td-right">Conversions</th></tr></thead>
+    <tbody>
+      <tr><td>1–18 juin (Max CPC €0,30)</td><td class="td-right">€148</td><td class="td-right" style="color:var(--green);">40,48x</td><td class="td-right" style="color:var(--red);">77,65%</td><td class="td-right">84,8</td></tr>
+      <tr style="background:#f0faf5;"><td>19–30 juin (Max CPC €0,75)</td><td class="td-right">€578</td><td class="td-right" style="color:var(--amber);">7,43x</td><td class="td-right" style="color:var(--amber);">54,54% ▼</td><td class="td-right">56,2</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="highlight info"><strong>Expansion assumée : plus de volume, ROAS plus dilué mais toujours rentable.</strong> La hausse du Max CPC a multiplié la dépense par ~4 (€148 → €578) et fait chuter le Lost IS rank de 77,65% à 54,54%, récupérant une large part d'impressions perdue. Le ROAS s'est compressé (40,48x → 7,43x) — attendu lors d'un élargissement du reach vers des audiences secondaires. Le 30 juin, le Max CPC a été ajusté à la baisse (€0,75 → €0,55) pour rééquilibrer efficacité et volume. Sur le mois complet, la campagne reste la plus efficiente du compte à €5,15 coût/conv.</div>
+
+  <!-- PMax -->
+  <div class="subsection-title" style="margin-top:20px;">FR NB PMax — Homme et Femme, post-apprentissage</div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Campagne</th><th class="td-right">Dépense Mai</th><th class="td-right">Dépense Juin</th><th class="td-right">ROAS Mai</th><th class="td-right">ROAS Juin</th><th class="td-right">Conv. Juin</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PMax Homme</strong></td><td class="td-right">€2 627</td><td class="td-right">€2 157</td><td class="td-right">3,67x</td><td class="td-right" style="color:var(--green);">2,16x</td><td class="td-right">62,5</td></tr>
+      <tr><td><strong>PMax Femme</strong></td><td class="td-right">€523</td><td class="td-right">€1 686</td><td class="td-right">2,13x</td><td class="td-right" style="color:var(--green);">2,07x</td><td class="td-right">44,6</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="highlight success">Les deux campagnes PMax dépassent le seuil de rentabilité de 2,0x sur le mois complet. PMax Homme : canal Discover (€1 376, 2,20x) et Search (€614, 2,20x) équilibrés ; audience seniors (65+ : 17,0 conv @€36,00 ; 55–64 : 14,7 conv @€25,35). PMax Femme a scalé de +222% tout en tenant son ROAS ; canal Search (€1 181) mène à 2,20x et YouTube excelle à 3,28x ; meilleure tranche d'âge 25–34 ans (8,08 conv @€20,10). 4 nouveaux assets ont été ajoutés à PMax Femme le 20 juin.</div>
+
+  <!-- NB Shopping Femmes -->
+  <div class="subsection-title" style="margin-top:20px;">FR NB Shopping Femmes — Le chantier prioritaire</div>
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Période</th><th class="td-right">Dépense</th><th class="td-right">Conversions</th><th class="td-right">ROAS</th><th class="td-right">Coût/conv.</th></tr></thead>
+    <tbody>
+      <tr><td>Mai (mois complet)</td><td class="td-right">€696</td><td class="td-right">6,8</td><td class="td-right" style="color:var(--red);">0,73x</td><td class="td-right">€102,95</td></tr>
+      <tr><td>1–18 juin (avant optimisations)</td><td class="td-right">€1 371</td><td class="td-right">31,2</td><td class="td-right" style="color:var(--amber);">1,66x</td><td class="td-right">€43,91</td></tr>
+      <tr style="background:#fdf5f5;"><td>19–30 juin (après tablet −100% + exclusions SKU)</td><td class="td-right">€487</td><td class="td-right">5,3</td><td class="td-right" style="color:var(--red);">0,88x ▼</td><td class="td-right">€91,40</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="highlight warning"><strong>Honnêteté sur cette campagne :</strong> le mois sur mois est nettement positif (0,73x en mai → 1,45x en juin, coût/conv divisé par deux). Mais à l'intérieur de juin, les optimisations du 19 juin (tablette −100%, exclusion de 2 SKUs) ont bien réduit le gaspillage — la dépense est passée de €1 371 à €487 — sans encore redresser l'efficacité : le ROAS de la seconde fenêtre est retombé à 0,88x sur un faible volume (5,3 conversions). Les coupes larges ont limité la casse mais ne suffisent pas. Un travail d'enchères au niveau SKU (bid choking granulaire) est nécessaire en juillet pour concentrer le budget sur les références réellement rentables. C'est la priorité n°1 du plan d'action.</div>
+
+  <!-- Micro-infusion -->
+  <div class="subsection-title" style="margin-top:20px;">FR NB Search — Micro-infusion Homme — Tentative d'optimisation puis arrêt</div>
+  <div class="split-grid">
+    <div class="split-card">
+      <div class="split-card-title">1–15 juin — avant optimisation</div>
+      <div class="split-row"><span class="split-row-label">Dépense</span><span class="split-row-value">€938</span></div>
+      <div class="split-row"><span class="split-row-label">ROAS</span><span class="split-row-value" style="color:var(--red);">0,51x</span></div>
+      <div class="split-row"><span class="split-row-label">CTR</span><span class="split-row-value">8,66%</span></div>
+      <div class="split-row"><span class="split-row-label">Coût/conv.</span><span class="split-row-value">€155,50</span></div>
+    </div>
+    <div class="split-card">
+      <div class="split-card-title">16–29 juin — après Manual CPC + mots-clés</div>
+      <div class="split-row"><span class="split-row-label">Dépense</span><span class="split-row-value">€198</span></div>
+      <div class="split-row"><span class="split-row-label">ROAS</span><span class="split-row-value" style="color:var(--amber);">0,59x</span></div>
+      <div class="split-row"><span class="split-row-label">CTR</span><span class="split-row-value" style="color:var(--green);">12,30% ▲</span></div>
+      <div class="split-row"><span class="split-row-label">Coût/conv.</span><span class="split-row-value">€129,93</span></div>
+    </div>
+  </div>
+  <div class="highlight info">L'optimisation a légèrement amélioré les signaux (CTR 8,66% → 12,30%, coût/conv €155 → €130) mais le ROAS est resté sous 0,60x — bien en dessous du seuil de rentabilité. Le passage en Manual CPC, la baisse du budget et les nouveaux mots-clés n'ont pas suffi. La campagne a été mise en pause le 30 juin. Décision correcte : à €151 de coût/conv sur le mois, elle pesait sur la marge du compte sans perspective de redressement à court terme.</div>
+</div>
+
+<!-- 5. PREMIER BILAN JUILLET -->
+<div class="section">
+  <div class="section-header"><div class="section-number" style="background:var(--green);">5</div><div class="section-title">Premier bilan juillet — 1–7 juillet 2026</div></div>
+  <div class="highlight warning"><strong>À lire avec prudence — données de conversion encore en cours de maturation.</strong> Sur une fenêtre de 7 jours aussi récente, les conversions sont systématiquement sous-déclarées : de nombreux clics n'ont pas encore été attribués (délai de conversion). La dépense ci-dessous est exacte, mais les ROAS affichés sont un plancher qui sera revu à la hausse dans les prochains jours, en particulier pour PMax où le délai de conversion est le plus long.</div>
+  <div class="table-wrap" style="margin-top:14px;">
+  <table>
+    <thead>
+      <tr>
+        <th>Campagne</th>
+        <th class="td-right">Dépense</th>
+        <th class="td-right">ROAS</th>
+        <th class="td-right">Conv.</th>
+        <th class="td-right">Coût/conv.</th>
+        <th class="td-center">Signal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>FR Brand Search</td><td class="td-right">€598</td><td class="td-right" style="color:var(--green);font-weight:700;">10,30x</td><td class="td-right">85,3</td><td class="td-right">€7,01</td><td class="td-center"><span class="badge badge-green">En norme ✅</span></td></tr>
+      <tr><td>FR Brand Shopping</td><td class="td-right">€193</td><td class="td-right" style="color:var(--green);font-weight:700;">7,11x</td><td class="td-right">20,6</td><td class="td-right">€9,35</td><td class="td-center"><span class="badge badge-green">En norme ✅</span></td></tr>
+      <tr><td>FR NB Shopping Hommes</td><td class="td-right">€292</td><td class="td-right" style="color:var(--green);font-weight:700;">2,16x</td><td class="td-right">8,8</td><td class="td-right">€33,13</td><td class="td-center"><span class="badge badge-green">Stable ✅</span></td></tr>
+      <tr><td>FR NB PMax Homme</td><td class="td-right">€582</td><td class="td-right" style="color:#888;">0,76x</td><td class="td-right">7,5</td><td class="td-right">€77,49</td><td class="td-center"><span class="badge badge-gray">Conv. en attente ⏳</span></td></tr>
+      <tr><td>FR NB PMax Femme</td><td class="td-right">€413</td><td class="td-right" style="color:#888;">0,42x</td><td class="td-right">3,5</td><td class="td-right">€117,80</td><td class="td-center"><span class="badge badge-gray">Conv. en attente ⏳</span></td></tr>
+      <tr style="background:#fdf5f5;"><td>FR NB Shopping Femmes</td><td class="td-right">€258</td><td class="td-right" style="color:var(--red);">0,42x</td><td class="td-right">2,2</td><td class="td-right">€119,42</td><td class="td-center"><span class="badge badge-red">À restructurer 🚨</span></td></tr>
+      <tr><td>FR NB Search — Concurrents</td><td class="td-right">€90</td><td class="td-right" style="color:#888;">—</td><td class="td-right">0</td><td class="td-right">—</td><td class="td-center"><span class="learning-tag">Apprentissage</span></td></tr>
+      <tr><td>FR NB Search — Micro-infusion</td><td class="td-right">€0</td><td class="td-right" style="color:#888;">—</td><td class="td-right">0</td><td class="td-right">—</td><td class="td-center"><span class="badge badge-gray">Pausée ✂️</span></td></tr>
+      <tr style="background:#f8f7f4;font-weight:700;"><td>Total compte</td><td class="td-right">€2 426</td><td class="td-right" style="color:var(--amber);">3,66x</td><td class="td-right">127,9</td><td class="td-right">€18,96</td><td class="td-center"><span class="badge badge-gray">Données à maturer ⏳</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="font-size:11px;color:#aaa;margin-top:8px;">Juillet 1–7. Les campagnes core (Brand Search, Brand Shopping, NB Shopping Hommes) affichent déjà des ROAS conformes. Les ROAS PMax (0,76x / 0,42x) reflètent le délai de conversion sur données fraîches et remonteront ; ils ne doivent pas déclencher de décision avant maturation (~10–14 jours).</p>
+</div>
+
+<!-- 6. OPTIMISATIONS JUIN -->
+<div class="section">
+  <div class="section-header"><div class="section-number">6</div><div class="section-title">Toutes les optimisations de juin 2026 — 100% réalisées</div></div>
+  <div class="highlight success">Tous les points d'action du rapport de mai 2026 ont été exécutés en juin, y compris le lancement de la campagne Concurrents et la Customer Match List (audiences créées le 23 juin). Aucun point en suspens reporté.</div>
+
+  <div class="action-item">
+    <div class="action-date">5 juin</div>
+    <div><div class="action-title">Sitelinks & structure — Micro-infusion Homme</div><div class="action-desc">Ajout de 4 sitelinks (Offres Pack, 781 Avis Clients, Garantie 30j, Commander) et ajustement du ciblage géographique.</div></div>
+  </div>
+  <div class="action-item">
+    <div class="action-date">7 juin</div>
+    <div><div class="action-title">Nettoyage mots-clés — Micro-infusion Homme</div><div class="action-desc">18 mots-clés négatifs en expression ajoutés (transplant, gélules, chirurgie, greffe…), 4 mots-clés exacts ajoutés, correction de l'URL finale et des chemins, 10 callouts créés.</div></div>
+  </div>
+  <div class="action-item">
+    <div class="action-date">16 juin</div>
+    <div><div class="action-title">Budget PMax Femme + enchères SKU NB Shopping Hommes</div><div class="action-desc">PMax Femme : budget €50 → €60/jour. NB Shopping Hommes : 3 SKUs relevés (€0,84 → €1,00, €0,88 → €1,05). Ajout de négatifs aux listes partagées.</div></div>
+  </div>
+  <div class="action-item">
+    <div class="action-date">19 juin</div>
+    <div><div class="action-title">Journée clé d'optimisation</div><div class="action-desc">Brand Search : budget €80 → €100/jour + 3 fautes d'orthographe de marque. Brand Shopping : Max CPC €0,30 → €0,75. NB Shopping Femmes + Hommes : enchère tablette −100%. NB Shopping Femmes : exclusion de 2 SKUs. Micro-infusion : passage en Manual CPC, Max CPC €0,80, 5 mots-clés exacts. Lancement de la campagne Concurrents (4 groupes d'annonces, RSA unifié, budget €30/jour).</div></div>
+  </div>
+  <div class="action-item">
+    <div class="action-date">20 juin</div>
+    <div><div class="action-title">Nouveaux assets — PMax Femme</div><div class="action-desc">4 titres et 4 descriptions ajoutés au groupe d'assets « Femmes » pour renforcer la performance créative.</div></div>
+  </div>
+  <div class="action-item">
+    <div class="action-date">23 juin</div>
+    <div><div class="action-title">Création des audiences (Customer Match / data segments)</div><div class="action-desc">4 audiences créées : acheteurs (≥1 achat), paniers abandonnés (30 j), non-acheteurs, acheteurs récurrents (durée de vie 540 j). Base du retargeting et des exclusions PMax.</div></div>
+  </div>
+  <div class="action-item">
+    <div class="action-date">30 juin</div>
+    <div><div class="action-title">Finalisations mensuelles</div><div class="action-desc">PMax Homme : budget €70 → €85/jour. Brand Shopping : Max CPC €0,75 → €0,55 + 38 négatifs (10 exacts, 28 expressions). Micro-infusion : campagne mise en pause. Concurrents : Max CPC des 4 groupes €0,50 → €1,50 pour accélérer l'apprentissage.</div></div>
+  </div>
+</div>
+
+<!-- 7. PLAN D'ACTION JUILLET -->
+<div class="section">
+  <div class="section-header"><div class="section-number" style="background:var(--green);">7</div><div class="section-title">Plan d'action — Juillet 2026</div></div>
+
+  <div class="june-card">
+    <span class="june-priority badge badge-red">Urgent</span>
+    <div class="june-body">
+      <div class="june-title">NB Shopping Femmes — restructuration au niveau SKU (bid choking granulaire)</div>
+      <div class="june-desc">Les coupes larges du 19 juin (tablette −100%, exclusion de 2 SKUs) ont réduit le gaspillage mais laissé la seconde fenêtre du mois à 0,88x. Passer à un travail fin : identifier les SKUs qui dépensent sans convertir, abaisser drastiquement leur Max CPC et concentrer le budget sur les références rentables. Ne pas pauser la campagne. Objectif : ROAS mois complet ≥ 2,0x d'ici fin juillet.</div>
+    </div>
+  </div>
+
+  <div class="june-card">
+    <span class="june-priority badge badge-amber">Priorité haute</span>
+    <div class="june-body">
+      <div class="june-title">PMax Homme + Femme — laisser maturer avant toute décision de scaling</div>
+      <div class="june-desc">Les ROAS de début juillet (0,76x / 0,42x) reflètent le délai de conversion, pas une baisse réelle. Ne pas modifier les budgets tant que la fenêtre 1–14 juillet n'est pas stabilisée (~10–14 jours). Une fois le ROAS remonté au-dessus de 2,0x sur données matures, envisager +15–20% sur les plafonds journaliers.</div>
+    </div>
+  </div>
+
+  <div class="june-card">
+    <span class="june-priority badge badge-amber">Priorité haute</span>
+    <div class="june-body">
+      <div class="june-title">Campagne Concurrents — maturation et nettoyage</div>
+      <div class="june-desc">Après le passage du Max CPC à €1,50 (30 juin), la campagne monte en volume (€90 dépensés en début juillet). Surveiller les termes de recherche et ajouter des négatifs, valider la pertinence des 4 concurrents actuels, puis élargir à 5–7 concurrents supplémentaires une fois un premier signal de conversion obtenu. Point d'étape à mi-juillet : viser les premières conversions et un ROAS > 1,0x.</div>
+    </div>
+  </div>
+
+  <div class="june-card">
+    <span class="june-priority badge badge-blue">Priorité moyenne</span>
+    <div class="june-body">
+      <div class="june-title">Brand Search — maintenir, ne pas suraugmenter</div>
+      <div class="june-desc">Après le passage à €100/jour, le Lost IS (budget) est à 0,00% et le Search IS à 94,14% : la campagne capte déjà la quasi-totalité de l'intention de marque. Pas de hausse de budget supplémentaire justifiée pour l'instant. Maintenir et surveiller l'IS ; réévaluer uniquement si le Lost IS budget remonte.</div>
+    </div>
+  </div>
+
+  <div class="june-card">
+    <span class="june-priority badge badge-blue">Priorité moyenne</span>
+    <div class="june-body">
+      <div class="june-title">Brand Shopping — surveiller le rééquilibrage post Max CPC</div>
+      <div class="june-desc">Le Max CPC a été ramené à €0,55 le 30 juin après l'expansion à €0,75. Suivre l'évolution du ROAS et du Lost IS rank sur juillet pour trouver le point d'équilibre entre efficacité (14x+ ROAS) et volume récupéré (Lost IS rank passé sous 55%).</div>
+    </div>
+  </div>
+
+  <div class="june-card">
+    <span class="june-priority badge badge-blue">Priorité moyenne</span>
+    <div class="june-body">
+      <div class="june-title">Activer les audiences de remarketing</div>
+      <div class="june-desc">Les 4 audiences créées le 23 juin sont prêtes. Les exploiter : exclusion des acheteurs existants des campagnes NB, signaux d'audience pour PMax, et préparation d'une campagne de retargeting (paniers abandonnés en priorité).</div>
+    </div>
+  </div>
+
+  <div class="june-card">
+    <span class="june-priority badge badge-blue">Priorité moyenne</span>
+    <div class="june-body">
+      <div class="june-title">Confirmer le maintien en pause de Micro-infusion</div>
+      <div class="june-desc">Dépense à €0 confirmée en début juillet. Laisser la campagne en pause 7–14 jours de plus et mesurer l'effet sur le ROAS global du compte. Si le ROAS gagne, maintenir la pause ; sinon, envisager l'archivage.</div>
+    </div>
+  </div>
+
+  <div class="june-card">
+    <span class="june-priority badge badge-gray">Pipeline</span>
+    <div class="june-body">
+      <div class="june-title">Test de rotation des assets PMax — fin juillet</div>
+      <div class="june-desc">Une fois les budgets PMax stabilisés, consulter les labels Best/Good/Low et remplacer les assets faibles, puis lancer un test de variantes créatives. Ne rien modifier avant d'avoir un mois complet de données de labels.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCLUSION -->
+<div class="section" style="text-align:center;padding:48px 32px;background:var(--dark);border-radius:12px;margin-bottom:20px;">
+  <div style="margin-bottom:24px;">
+    <div style="width:52px;height:52px;position:relative;margin:0 auto 12px;">
+      <div style="position:absolute;width:52px;height:52px;border-radius:50%;border:6px solid #0085F7;border-bottom-color:transparent;transform:rotate(-30deg);"></div>
+      <div style="position:absolute;width:34px;height:34px;top:9px;left:9px;border-radius:50%;border:5px solid #138D5A;border-top-color:transparent;transform:rotate(30deg);"></div>
+      <div style="position:absolute;width:16px;height:16px;top:18px;left:18px;border-radius:50%;background:#F8B83A;"></div>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;">Katchingg Media</div>
+  </div>
+  <h2 style="font-size:22px;font-weight:700;color:#fff;margin-bottom:10px;">Juin a validé la restructuration de mai.</h2>
+  <p style="font-size:13px;color:rgba(255,255,255,0.5);max-width:480px;margin:0 auto 24px;line-height:1.7;">100% des points d'action de mai ont été exécutés. Valeur de conversion +18,6%, conversions +17,4%, le tout à un ROAS toujours très rentable de 4,61x. Brand Search a doublé son volume et supprimé sa limitation budgétaire. Les deux PMax dépassent 2,0x. Deux décisions nettes prises : arrêt de Micro-infusion, lancement de Concurrents. Juillet sera le mois de l'optimisation SKU sur NB Shopping Femmes et de la maturation des nouvelles campagnes.</p>
+  <div style="display:flex;justify-content:center;gap:0;max-width:320px;margin:0 auto;">
+    <div style="flex:1;padding:14px;background:rgba(255,255,255,0.05);border-radius:8px 0 0 8px;border-right:1px solid rgba(255,255,255,0.08);">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.35);margin-bottom:5px;">Préparé par</div>
+      <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);">Diana</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);">Chargée de Media</div>
+    </div>
+    <div style="flex:1;padding:14px;background:rgba(255,255,255,0.05);border-radius:0 8px 8px 0;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.35);margin-bottom:5px;">Vérifié par</div>
+      <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.8);">Charles Perot</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);">Manager</div>
+    </div>
+  </div>
+  <div style="margin:24px auto 0;height:4px;border-radius:2px;background:linear-gradient(90deg,#0085F7 0%,#138D5A 50%,#F8B83A 100%);max-width:160px;"></div>
+</div>
+
+<div class="report-footer">
+  <div>Katchingg Media — Google Ads pour l'eCom &nbsp;|&nbsp; Diana &nbsp;|&nbsp; Charles Perot</div>
+  <div>Colagea — Résumé de Performance Juin 2026</div>
+</div>
+<div class="color-bar" style="margin-top:14px;margin-bottom:0;"></div>
+
+</div>
+
+<script>
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Brand Shopping', 'Brand Search', 'NB Shopping', 'PMax', 'NB Search'],
+    datasets: [
+      { label: 'Mai 2026', data: [13479, 12634, 6689, 9232, 0], backgroundColor: '#c8c6be', borderRadius: 4 },
+      { label: 'Juin 2026', data: [10293, 28506, 5384, 8140, 593], backgroundColor: '#0085F7', borderRadius: 4 }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top', labels: { font: { size: 11 }, color: '#666', boxWidth: 12, padding: 16 } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: €${ctx.parsed.y.toLocaleString()}` } }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 10 }, color: '#888', maxRotation: 20 } },
+      y: { grid: { color: '#f0ede8' }, ticks: { font: { size: 10 }, color: '#888', callback: v => '€' + (v/1000).toFixed(0) + 'k' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
